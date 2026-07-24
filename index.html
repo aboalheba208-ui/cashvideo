@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>كاش فيديو - Cash Video App</title>
+    <!-- سكربت منصة Adsgram للإعلانات -->
+    <script src="https://sad.adsgram.ai/js/adsgram.min.js?v=1"></script>
     <style>
         body {
             font-family: Tahoma, sans-serif;
             background-color: #0f172a;
             color: #ffffff;
-            margin: 0;
+            text-align: center;
             padding: 20px;
+            margin: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -18,30 +21,25 @@
             min-height: 100vh;
         }
         .container {
-            background-color: #1e293b;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            text-align: center;
-            width: 100%;
             max-width: 400px;
-        }
-        header h1 {
-            font-size: 22px;
-            margin-bottom: 10px;
-            color: #38bdf8;
+            width: 100%;
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            box-sizing: border-box;
         }
         .points-box {
-            background-color: #f59e0b;
+            font-size: 20px;
+            background: #eab308;
             color: #000;
-            font-size: 24px;
+            padding: 10px;
+            border-radius: 8px;
             font-weight: bold;
-            padding: 15px;
-            border-radius: 10px;
-            margin: 20px 0;
+            margin-bottom: 20px;
         }
-        .btn {
-            background-color: #22c55e;
+        .ad-button {
+            background-color: #2563eb;
             color: white;
             border: none;
             padding: 12px 20px;
@@ -49,30 +47,50 @@
             border-radius: 8px;
             cursor: pointer;
             width: 100%;
-            margin-top: 10px;
             font-weight: bold;
+            transition: 0.3s;
         }
-        .btn:hover {
-            background-color: #16a34a;
+        .ad-button:hover {
+            background-color: #1d4ed8;
+        }
+        .status {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #94a3b8;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>تطبيق كاش فيديو</h1>
-        <p>شاهد الفيديوهات واجمع الأرباح والنقاط بسهولة</p>
+        <h2>Cash Video</h2>
+        <div class="points-box">💰 رصيدك: <span id="userPoints">0</span> نقطة</div>
         
-        <div class="points-box">
-            💰 150 نقطة
-        </div>
-
-        <button class="btn" onclick="watchVideo()">مشاهدة فيديو وكسب نقاط</button>
+        <button class="ad-button" onclick="showAd()">مقطع المكافآت السريع 🎁<br><small>شاهد الإعلان واربح نقاط</small></button>
+        
+        <div class="status" id="statusMessage">اضغط على الزر أعلاه لبدء مشاهدة الإعلان</div>
     </div>
 
     <script>
-        function watchVideo() {
-            alert("تم تسجيل النقاط بنجاح! سيتم تحويلك للمحتوى.");
+        // تهيئة إعلانات Adsgram بالمعرف الخاص بك
+        const adController = window.Adsgram.init({ blockId: "39483" });
+        
+        let currentPoints = 0;
+
+        function showAd() {
+            const statusEl = document.getElementById("statusMessage");
+            statusEl.innerText = "جاري تحميل الإعلان...";
+
+            adController.show().then((result) => {
+                // نجاح مشاهدة الإعلان بالكامل
+                currentPoints += 150;
+                document.getElementById("userPoints").innerText = currentPoints;
+                statusEl.innerText = "🎉 مبروك! تمت إضافة 150 نقطة لرصيدك.";
+            }).catch((result) => {
+                // فشل أو أغلق المستخدم الإعلان قبل نهايته
+                console.log("Ad error or closed", result);
+                statusEl.innerText = "⚠️ يجب مشاهدة الإعلان كاملاً لتتمكن من جمع المكافأة.";
+            });
         }
     </script>
 
